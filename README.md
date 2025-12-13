@@ -127,7 +127,6 @@ r2/
 │   ├── scanner.rs          # File discovery
 │   ├── executor.rs         # Command execution
 │   ├── watcher.rs          # Event-based file watching
-│   └── ui.rs               # Gaming-themed output
 └── tests/
     └── integration_tests.rs # Integration tests
 ```

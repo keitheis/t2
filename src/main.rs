@@ -1,13 +1,10 @@
 mod executor;
 mod filter;
 mod scanner;
-mod ui;
 mod watcher;
 
 use anyhow::{Context, Result};
 use clap::Parser;
-use filter::IgnoreFilter;
-use std::sync::Arc;
 
 #[derive(Parser, Debug)]
 #[command(name = "r2")]
@@ -28,14 +25,9 @@ struct Cli {
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    // Parse CLI arguments
     let cli = Cli::parse();
 
-    // Create ignore filter
-    let filter = Arc::new(IgnoreFilter::new());
-
-    // Gather files to monitor
-    let files = scanner::gather_files(&cli.paths, &filter)
+    let files = scanner::gather_files(&cli.paths)
         .context("Failed to gather files to monitor")?;
 
     if files.is_empty() {
@@ -43,39 +35,35 @@ async fn main() -> Result<()> {
         std::process::exit(1);
     }
 
-    // Print watching message
     let paths_str = cli.paths.join(" ");
-    ui::print_watching(files.len(), &paths_str);
+    println!("r2 is watching about {} files:", files.len());
+    println!("{}", paths_str);
 
-    // Setup file watcher
-    let (mut change_rx, _debouncer) = watcher::setup_watcher(files, Arc::clone(&filter))
+    let (mut change_rx, _debouncer) = watcher::setup_watcher(files)
         .context("Failed to setup file watcher")?;
 
-    // Setup Ctrl+C handler
     let ctrl_c = tokio::signal::ctrl_c();
     tokio::pin!(ctrl_c);
 
-    // Run command immediately on startup (like Python version)
-    ui::print_fight();
+    // Run command immediately on startup
+    println!("FIGHT!");
     executor::execute_command(&cli.command)
         .await
         .context("Failed to execute command")?;
-    ui::print_continue();
+    println!("CONTINUE?");
 
     // Main event loop
     loop {
         tokio::select! {
-            // File changed
             Some(_) = change_rx.recv() => {
-                ui::print_fight();
+                println!("FIGHT!");
                 if let Err(e) = executor::execute_command(&cli.command).await {
                     eprintln!("Error executing command: {}", e);
                 }
-                ui::print_continue();
+                println!("CONTINUE?");
             }
-            // Ctrl+C pressed
             _ = &mut ctrl_c => {
-                ui::print_gameover();
+                println!("GAMEOVER");
                 break;
             }
         }
