@@ -1,0 +1,42 @@
+[package]
+name = "r2"
+version = "1.0.0"
+edition = "2021"
+authors = ["Keith Yang <yang@keitheis.org>"]
+license = "MIT"
+description = "Rerun commands when files change - Rust file watcher"
+repository = "https://github.com/keitheis/r2"
+keywords = ["watcher", "file", "development", "automation", "cli"]
+categories = ["command-line-utilities", "development-tools"]
+
+[[bin]]
+name = "r2"
+path = "src/main.rs"
+
+[dependencies]
+# File system watching with event notifications
+notify = "6.1"
+notify-debouncer-full = "0.3"
+
+# CLI argument parsing
+clap = { version = "4.4", features = ["derive"] }
+
+# Cross-platform path handling
+glob = "0.3"
+
+# Async runtime
+tokio = { version = "1.35", features = ["rt-multi-thread", "macros", "process", "signal", "sync"] }
+
+# Error handling
+anyhow = "1.0"
+
+# Regex for pattern matching
+regex = "1.10"
+
+[dev-dependencies]
+tempfile = "3.8"
+
+[profile.release]
+lto = true
+codegen-units = 1
+strip = true
