@@ -2,11 +2,19 @@ use std::path::Path;
 
 /// File extensions to ignore during file watching
 const IGNORE_EXTENSIONS: &[&str] = &[
-    "pyc", "swp", "swo", "bmp", "jpg", "jpeg", "png", "gif", "svg", "psd", "xcf", "pxm",
+    "pyc", "swp", "swx", "swo", "bmp", "jpg", "jpeg", "png", "gif", "svg", "psd", "xcf", "pxm",
 ];
 
-/// Check if a file path should be ignored based on its extension
+/// Check if a file path should be ignored based on its extension or if it's hidden
 pub fn should_ignore(path: &Path) -> bool {
+    // Ignore hidden files (starting with .)
+    if let Some(file_name) = path.file_name().and_then(|n| n.to_str()) {
+        if file_name.starts_with('.') {
+            return true;
+        }
+    }
+
+    // Ignore by extension
     path.extension()
         .and_then(|ext| ext.to_str())
         .map(|ext| IGNORE_EXTENSIONS.contains(&ext.to_lowercase().as_str()))
@@ -58,5 +66,20 @@ mod tests {
     fn test_do_not_ignore_similar_extensions() {
         assert!(!should_ignore(Path::new("script.py")));
         assert!(!should_ignore(Path::new("file.sw")));
+    }
+
+    #[test]
+    fn test_ignore_hidden_files() {
+        assert!(should_ignore(Path::new(".test_validate_order.py.swx")));
+        assert!(should_ignore(Path::new(".hidden_file.txt")));
+        assert!(should_ignore(Path::new(".git")));
+        assert!(should_ignore(Path::new("/path/to/.hidden")));
+    }
+
+    #[test]
+    fn test_do_not_ignore_regular_files() {
+        assert!(!should_ignore(Path::new("test.py")));
+        assert!(!should_ignore(Path::new("regular_file.txt")));
+        assert!(!should_ignore(Path::new("/path/to/file.rs")));
     }
 }
