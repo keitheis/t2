@@ -7,7 +7,7 @@ use anyhow::{Context, Result};
 use clap::Parser;
 
 #[derive(Parser, Debug)]
-#[command(name = "r2")]
+#[command(name = "t2")]
 #[command(version, about = "Rerun commands when files change", long_about = None)]
 struct Cli {
     /// Command to run when files change
@@ -36,7 +36,7 @@ async fn main() -> Result<()> {
     }
 
     let paths_str = cli.paths.join(" ");
-    println!("r2 is watching about {} files:", files.len());
+    println!("t2 is watching about {} files:", files.len());
     println!("{}", paths_str);
 
     let (mut change_rx, _debouncer) = watcher::setup_watcher(files)

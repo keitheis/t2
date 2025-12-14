@@ -413,18 +413,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "69cdb34c158ceb288df11e18b4bd39de994f6657d83847bdffdbd7f346754b0f"
 
 [[package]]
-name = "r2"
-version = "1.0.0"
-dependencies = [
- "anyhow",
- "clap",
- "notify",
- "notify-debouncer-full",
- "tempfile",
- "tokio",
-]
-
-[[package]]
 name = "redox_syscall"
 version = "0.5.18"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -491,6 +479,18 @@ dependencies = [
  "proc-macro2",
  "quote",
  "unicode-ident",
+]
+
+[[package]]
+name = "t2"
+version = "1.0.0"
+dependencies = [
+ "anyhow",
+ "clap",
+ "notify",
+ "notify-debouncer-full",
+ "tempfile",
+ "tokio",
 ]
 
 [[package]]

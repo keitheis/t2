@@ -1,16 +1,16 @@
 [package]
-name = "r2"
+name = "t2"
 version = "1.0.0"
 edition = "2021"
 authors = ["Keith Yang <yang@keitheis.org>"]
 license = "MIT"
 description = "Rerun commands when files change - Rust file watcher"
-repository = "https://github.com/keitheis/r2"
+repository = "https://github.com/keitheis/t2"
 keywords = ["watcher", "file", "development", "automation", "cli"]
 categories = ["command-line-utilities", "development-tools"]
 
 [[bin]]
-name = "r2"
+name = "t2"
 path = "src/main.rs"
 
 [dependencies]

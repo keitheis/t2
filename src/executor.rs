@@ -38,7 +38,7 @@ mod tests {
     #[tokio::test]
     async fn test_execute_simple_command() {
         // Test with a simple echo command
-        let result = execute_command("echo 'Hello, r2!'").await;
+        let result = execute_command("echo 'Hello, t2!'").await;
         assert!(result.is_ok());
     }
 
