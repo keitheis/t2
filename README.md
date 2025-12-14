@@ -17,6 +17,12 @@ A fast, efficient file watcher written in Rust that automatically reruns command
 
 ## Installation
 
+### From crates.io
+
+```bash
+cargo install t2
+```
+
 ### From Source
 
 ```bash
